@@ -1,0 +1,88 @@
+<section class="hero is-link is-bold">
+    <div class="hero-body">
+        <div class="container">
+            <h1 class="title">
+                Workya
+            </h1>
+            <h2 class="subtitle">
+                Formulario de Registro
+            </h2>
+        </div>
+    </div>
+</section>
+<div class="container">
+    <section class="section">
+        <form [formGroup]="form" novalidate (ngSubmit)="save($event)">
+            <div class="field">
+                <label class="label">Nombre</label>
+                <div class="control has-icons-left has-icons-right">
+                    <input class="input" type="text" [class.is-danger]="firtsNameFieldIsInvalid"
+                        [class.is-success]="firtsNameFieldIsValid" formControlName="firtsName" />
+                    <span class="icon is-small is-left">
+                        <i class="fas fa-user"></i>
+                    </span>
+                    <span *ngIf="firtsNameFieldIsValid" class="icon is-small is-right">
+                        <i class="fas fa-check"></i>
+                    </span>
+                    <span *ngIf="firtsNameFieldIsInvalid" class="icon is-small is-right">
+                        <i class="fas fa-times"></i>
+                    </span>
+                </div>
+                <div *ngIf="firtsNameFieldIsInvalid">
+
+                    <p class="help is-danger" *ngIf="firtsNameField.hasError('required')">Es un campo requerido</p>
+                    <p class="help is-danger" *ngIf="firtsNameField.hasError('minlength')">Debe ser minimo de 3
+                        caracteres</p>
+                    <p class="help is-danger" *ngIf="firtsNameField.hasError('maxlength')">Debe ser maximo de 50
+                        caracteres</p>
+                    <p class="help is-danger" *ngIf="firtsNameField.hasError('pattern')">Debe contener solo letras</p>
+                </div>
+            </div>
+            <div class="field">
+                <label class="label">Apellidos</label>
+                <div class="control has-icons-left has-icons-right">
+                    <input class="input" type="text" formControlName="lastName" />
+                    <span class="icon is-small is-left">
+                        <i class="fas fa-user"></i>
+                    </span>
+                    <span class="icon is-small is-right">
+                        <i class="fas fa-check"></i>
+                    </span>
+                </div>
+                <p class="help is-success">This username is available</p>
+            </div>
+            <div class="field">
+                <label class="label">Correo electronico</label>
+                <div class="control has-icons-left has-icons-right">
+                    <input class="input" [class.is-danger]="emailFieldIsInvalid" [class.is-success]="emailFieldIsValid"
+                        type="email" formControlName="email" />
+                    <span class="icon is-small is-left">
+                        <i class="fas fa-at"></i>
+                    </span>
+                    <span *ngIf="emailFieldIsInvalid" class="icon is-small is-right">
+                        <i class="fas fa-times"></i>
+                    </span>
+                    <span *ngIf="emailFieldIsValid" class="icon is-small is-right">
+                        <i class="fas fa-check"></i>
+                    </span>
+                </div>
+                <div *ngIf="emailFieldIsInvalid">
+                    <p class="help is-danger" *ngIf="emailField.hasError('required')">
+                        Es un campo requerido
+                    </p>
+                    <p class="help is-danger" *ngIf="emailField.hasError('email')">
+                        No es un email
+                    </p>
+                </div>
+            </div>
+            <div class="field is-grouped">
+                <div class="control">
+                    <button class="button is-link" type="submit">Guardar</button>
+                </div>
+                <div class="control">
+                    <button class="button is-light" type="reset">Cancelar</button>
+                </div>
+            </div>
+        </form>
+    </section>
+</div>
