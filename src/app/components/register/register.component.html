@@ -1,4 +1,4 @@
-<section class="hero is-link is-bold">
+<section class="hero is-primary is-bold">
     <div class="hero-body">
         <div class="container">
             <h1 class="title">
@@ -41,15 +41,26 @@
             <div class="field">
                 <label class="label">Apellidos</label>
                 <div class="control has-icons-left has-icons-right">
-                    <input class="input" type="text" formControlName="lastName" />
+                    <input class="input" [class.is-danger]="lastNameFieldIsInvalid" [class.is-success]="lastNameFieldIsValid" type="text" formControlName="lastName" />
                     <span class="icon is-small is-left">
                         <i class="fas fa-user"></i>
                     </span>
-                    <span class="icon is-small is-right">
+                    <span *ngIf="lastNameFieldIsValid" class="icon is-small is-right">
                         <i class="fas fa-check"></i>
                     </span>
+                    <span *ngIf="lastNameFieldIsInvalid" class="icon is-small is-right">
+                        <i class="fas fa-times"></i>
+                    </span>
                 </div>
-                <p class="help is-success">This username is available</p>
+                <div *ngIf="lastNameFieldIsInvalid">
+
+                    <p class="help is-danger" *ngIf="lastNameField.hasError('required')">Es un campo requerido</p>
+                    <p class="help is-danger" *ngIf="lastNameField.hasError('minlength')">Debe ser minimo de 3
+                        caracteres</p>
+                    <p class="help is-danger" *ngIf="lastNameField.hasError('maxlength')">Debe ser maximo de 50
+                        caracteres</p>
+                    <p class="help is-danger" *ngIf="lastNameField.hasError('pattern')">Debe contener solo letras</p>
+                </div>
             </div>
             <div class="field">
                 <label class="label">Correo electronico</label>
@@ -75,9 +86,57 @@
                     </p>
                 </div>
             </div>
+
+            <div class="field">
+                <label class="label">Contraseña</label>
+                <div class="control has-icons-left has-icons-right">
+                    <input class="input" [class.is-danger]="passwordFieldIsInvalid" [class.is-success]="passwordFieldIsValid"
+                        type="password" formControlName="password" />
+                    <span class="icon is-small is-left">
+                        <i class="fas fa-key"></i>
+                    </span>
+                    <span *ngIf="passwordFieldIsInvalid" class="icon is-small is-right">
+                        <i class="fas fa-times"></i>
+                    </span>
+                    <span *ngIf="passwordFieldIsValid" class="icon is-small is-right">
+                        <i class="fas fa-check"></i>
+                    </span>
+                </div>
+                <div *ngIf="passwordFieldIsInvalid">
+                    <p class="help is-danger" *ngIf="passwordField.hasError('required')">
+                        Es un campo requerido
+                    </p>
+                    <p class="help is-danger" *ngIf="passwordField.hasError('pattern')">
+                        Debe contener entre 8 y 15 caracteres, al menos una letra mayúscula, una minuscula, un numero y un caracter especial.
+                    </p>
+                </div>
+            </div>
+
+            <div class="field">
+                <label class="label">Confirma tu contraseña</label>
+                <div class="control has-icons-left has-icons-right">
+                    <input class="input" [class.is-danger]="confirmPasswordFieldIsInvalid" [class.is-success]="confirmPasswordFieldIsValid"
+                        type="password" formControlName="confirmPassword" />
+                    <span class="icon is-small is-left">
+                        <i class="fas fa-key"></i>
+                    </span>
+                    <span *ngIf="confirmPasswordFieldIsInvalid || passwordAreNotEqual" class="icon is-small is-right">
+                        <i class="fas fa-times"></i>
+                    </span>
+                    <span *ngIf="confirmPasswordFieldIsValid && !passwordAreNotEqual" class="icon is-small is-right">
+                        <i class="fas fa-check"></i>
+                    </span>
+                </div>
+                <div *ngIf="confirmPasswordFieldIsInvalid || passwordAreNotEqual">                    
+                    <p class="help is-danger" *ngIf="passwordAreNotEqual || confirmPasswordField.hasError('required')">
+                        Las contraseñas no coinciden
+                    </p>                   
+                </div>
+            </div>
+
             <div class="field is-grouped">
                 <div class="control">
-                    <button class="button is-link" type="submit">Guardar</button>
+                    <button class="button is-primary" type="submit">Guardar</button>
                 </div>
                 <div class="control">
                     <button class="button is-light" type="reset">Cancelar</button>

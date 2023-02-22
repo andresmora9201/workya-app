@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
+import { MyValidations } from '../../utils/my-validations';
+import {RegisterService} from '../../services/register.service';
 
 
 @Component({
@@ -11,23 +13,24 @@ import { debounceTime } from 'rxjs/operators';
 export class RegisterComponent implements OnInit {
 
   form: FormGroup;
-    
-  constructor(private formBuilder: FormBuilder) {
+
+  constructor(private formBuilder: FormBuilder,
+    private registerService: RegisterService) {
     this.buildForm();
   }
-  
+
   ngOnInit(): void {
   }
 
   private buildForm() {
     this.form = this.formBuilder.group({
-      firtsName: ['',  [Validators.required, Validators.minLength(3), Validators.maxLength(50), Validators.pattern(/^[a-zA-Z ]+$/)]],
-      lastName: ['',  [Validators.required]],
-      date: ['', [Validators.required]],
+      firtsName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50), Validators.pattern(/^[a-zA-Z ]+$/)]],
+      lastName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50), Validators.pattern(/^[a-zA-Z ]+$/)]],
       email: ['', [Validators.required, Validators.email]],
-      text: ['', [Validators.required, Validators.maxLength(80)]],
-      category: ['', [Validators.required]],
-      gender: ['', [Validators.required]],
+      password: ['', [Validators.required, Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])([A-Za-z\d$@$!%*?&]|[^ ]){8,15}$/)]],
+      confirmPassword: ['', [Validators.required]],
+    }, {
+      validators: MyValidations.arePasswordsEqual
     });
 
     // this.form.valueChanges
@@ -39,9 +42,10 @@ export class RegisterComponent implements OnInit {
 
   save(event: Event) {
     event.preventDefault();
-    if(this.form.valid) {
+    if (this.form.valid) {
       const value = this.form.value;
       console.log(value);
+      // this.registerService.create(value).subscribe();
     } else {
       this.form.markAllAsTouched();
     }
@@ -59,6 +63,18 @@ export class RegisterComponent implements OnInit {
     return this.firtsNameField.touched && this.firtsNameField.invalid;
   }
 
+  get lastNameField() {
+    return this.form.get('lastName');
+  }
+
+  get lastNameFieldIsValid() {
+    return this.lastNameField.touched && this.lastNameField.valid;
+  }
+
+  get lastNameFieldIsInvalid() {
+    return this.lastNameField.touched && this.lastNameField.invalid;
+  }
+
   get emailField() {
     return this.form.get('email');
   }
@@ -71,8 +87,35 @@ export class RegisterComponent implements OnInit {
     return this.emailField.touched && this.emailField.invalid;
   }
 
-  get textArea() {
-    return this.form.get('text');
+  get passwordField() {
+    return this.form.get('password');
   }
 
+  get passwordFieldIsValid() {
+    return this.passwordField.touched && this.passwordField.valid;
+  }
+
+  get passwordFieldIsInvalid() {
+    return this.passwordField.touched && this.passwordField.invalid;
+  }
+
+  get confirmPasswordField() {
+    return this.form.get('confirmPassword');
+  }
+
+  get confirmPasswordFieldErrors() {
+    return JSON.stringify(this.form.get('confirmPassword'));
+  }
+
+  get confirmPasswordFieldIsValid() {
+    return this.confirmPasswordField.touched && this.confirmPasswordField.valid;
+  }
+
+  get confirmPasswordFieldIsInvalid() {
+    return this.confirmPasswordField.touched && this.confirmPasswordField.invalid;
+  }
+
+  get passwordAreNotEqual() {
+    return this.form.hasError('passAreNotEqual') && this.passwordField.touched && this.confirmPasswordField.touched;
+  }
 }
