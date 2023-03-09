@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
+import { RegisterRq } from 'src/app/models/register.model';
+import { RegisterService } from 'src/app/services/register/register.service';
 import { MyValidations } from '../../utils/my-validations';
-import {RegisterService} from '../../services/register.service';
 
 
 @Component({
@@ -45,7 +46,15 @@ export class RegisterComponent implements OnInit {
     if (this.form.valid) {
       const value = this.form.value;
       console.log(value);
-      // this.registerService.create(value).subscribe();
+      const body: RegisterRq = {
+        firtsName: value.firtsName,
+        lastName: value.lastName,
+        email: value.email,
+        password: value.password
+      }
+      this.registerService.create(body).subscribe((res) => {
+        console.log(res);
+      });
     } else {
       this.form.markAllAsTouched();
     }
